@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
 import { getLegajo } from "@/lib/mock-data";
+import { getById } from "@/lib/storage";
 import { LegajoHeader } from "@/components/legajos/legajo-header";
 import { StatStrip } from "@/components/legajos/stat-strip";
 import { AIAnalysisCard } from "@/components/legajos/ai-analysis-card";
@@ -17,7 +18,7 @@ import { PromptsDebug } from "@/components/legajos/prompts-debug";
 
 export default async function LegajoDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const legajo = getLegajo(id);
+  const legajo = (await getById(id)) ?? getLegajo(id);
   if (!legajo) notFound();
 
   const uboThreshold = legajo.entityScope === "MSB" ? 25 : 10;

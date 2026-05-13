@@ -3,31 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --bg: #FAFAF7;
-  --bg-elevated: #FFFFFF;
-  --bg-muted: #F2F0E9;
+  /* Dark palette — match financial-serious aesthetic of reference design */
+  --bg: #0E1014;
+  --bg-elevated: #14171C;
+  --bg-muted: #1A1D24;
 
-  --text: #0A0A09;
-  --text-secondary: #5C5C58;
-  --text-tertiary: #8A8A84;
+  --text: #E8E8E0;
+  --text-secondary: #A8A8A0;
+  --text-tertiary: #6A6A64;
 
-  --border: #E8E6DF;
-  --border-strong: #D1CEC4;
+  --border: #232730;
+  --border-strong: #2F343F;
 
-  --accent: #1F4047;
-  --accent-hover: #163036;
+  --accent: #2F6470;
+  --accent-hover: #3A7884;
 
-  --success: #1F5A3D;
-  --success-bg: #E8F0EB;
+  --success: #2E8B5E;
+  --success-bg: #16291F;
 
-  --warning: #A45A11;
-  --warning-bg: #FAF1E2;
+  --warning: #C68F2E;
+  --warning-bg: #2A2114;
 
-  --danger: #A02828;
-  --danger-bg: #FBEAEA;
+  --danger: #C44A4A;
+  --danger-bg: #2A1616;
 
-  --info: #1F4F7A;
-  --info-bg: #EAF0F6;
+  --info: #5B8FCC;
+  --info-bg: #15202F;
 }
 
 html,
@@ -39,7 +40,7 @@ body {
 }
 
 ::selection {
-  background-color: rgba(31, 64, 71, 0.15);
+  background-color: rgba(91, 143, 204, 0.25);
 }
 
 ::-webkit-scrollbar {

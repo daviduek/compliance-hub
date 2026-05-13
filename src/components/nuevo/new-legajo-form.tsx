@@ -42,6 +42,7 @@ export function NewLegajoForm() {
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const checklist = useMemo(
     () => buildChecklist({ entityScope, clientType, countryOfIncorporation: country, requestedService }),
@@ -49,12 +50,37 @@ export function NewLegajoForm() {
   );
   const sum = checklistSummary(checklist);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
-    // Demo: in a real implementation this would persist the legajo.
-    // Here we redirect to a known sample legajo so the user sees the next screen.
-    setTimeout(() => router.push("/legajos/LEG-2026-0418"), 600);
+    setError(null);
+    try {
+      const res = await fetch("/api/legajos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientLegalName: legalName,
+          taxId,
+          countryOfIncorporation: country,
+          entityScope,
+          clientType,
+          corporateForm,
+          requestedService,
+          expectedMonthlyVolume: volume,
+          primaryContact: contactName,
+          primaryContactEmail: contactEmail,
+        }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error || `HTTP ${res.status}`);
+      }
+      const { legajo } = (await res.json()) as { legajo: { id: string } };
+      router.push(`/legajos/${legajo.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error desconocido");
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -138,7 +164,8 @@ export function NewLegajoForm() {
           </CardBody>
         </Card>
 
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end gap-3">
+          {error && <span className="text-xs text-[color:var(--danger)] mr-auto">{error}</span>}
           <Button type="button" variant="ghost" onClick={() => router.back()}>Cancelar</Button>
           <Button type="submit" variant="primary" disabled={submitting}>
             {submitting ? "Creando…" : "Crear legajo"}
